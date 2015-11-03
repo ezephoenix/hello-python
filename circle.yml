@@ -3,21 +3,36 @@ machine:
     - docker
 
 dependencies:
+  pre:
+    - echo $IMAGE_NAME
+    - echo $CIRCLE_BUILD_NUM
+    - docker info
   override:
-    - echo "override section"
+    - docker build -t $IMAGE_NAME .
+    - docker tag $IMAGE_NAME $IMAGE_NAME:$CIRCLE_BUILD_NUM
 
 test:
   override:
-    - echo "no tests yet =("
+    - docker run -d -p 80:5000 --name hello $IMAGE_NAME
 
 deployment:
   hub:
     branch: master
     commands:
-      - docker build -t $IMAGE_NAME:$CIRCLE_BUILD_NUM .
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push $IMAGE_NAME:latest
+      - docker push $IMAGE_NAME
       - docker push $IMAGE_NAME:$CIRCLE_BUILD_NUM
+      
+      # deploy to sit.ezecloud.net
+      - curl -X POST $TUTUM_WEBHOOK_SIT; sleep 30
+      
+      # system test
+      - docker run ezephoenix/phoenix-test
+      - docker tag $IMAGE_NAME $IMAGE_NAME:PASSED
+      - docker push $IMAGE_NAME:PASSED
+      
+      # deploy to staging.ezecloud.net
+      - curl -X POST $TUTUM_WEBHOOK_STAGING
 
       # - install the rancher-upgrade-prep tool
       - git clone https://github.com/ezephoenix/rancher-upgrade prep
