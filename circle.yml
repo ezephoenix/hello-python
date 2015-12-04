@@ -14,6 +14,8 @@ dependencies:
 test:
   override:
     - docker run -d -p 80:5000 --name hello $IMAGE_NAME
+    - docker build -t apitest apitest
+    - docker run --link serviceUnderTest:serviceUnderTest apitest http://serviceUnderTest:5000
 
 deployment:
   hub:
