@@ -5,4 +5,4 @@ Python hello world web server
 python hello.py
 
 # Using the web server
-curl http://localhost:5000
+curl http://localhost:80

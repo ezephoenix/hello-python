@@ -10,5 +10,8 @@ def hello_world():
 def health_check():
     return jsonify({'status':'up'})
 
+service_port=80             # PROD
+#service_port=5000          # DEV
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=service_port)
