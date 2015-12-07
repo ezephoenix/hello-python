@@ -13,7 +13,7 @@ dependencies:
 
 test:
   override:
-    - docker run -d -p 80:80 --name hello $IMAGE_NAME; sleep 10
+    - docker run -d -p 80:80 $IMAGE_NAME; sleep 10
     - curl --retry 10 --retry-delay 5 -v http://localhost
 
 deployment:
@@ -24,17 +24,6 @@ deployment:
       - docker push $IMAGE_NAME
       - docker push $IMAGE_NAME:$CIRCLE_BUILD_NUM
       
-      # deploy to sit.ezecloud.net
-      - curl -X POST $TUTUM_WEBHOOK_SIT; sleep 30
-      
-      # system test
-      - docker run ezephoenix/phoenix-test
-      - docker tag $IMAGE_NAME $IMAGE_NAME:PASSED
-      - docker push $IMAGE_NAME:PASSED
-      
-      # deploy to staging.ezecloud.net
-      - curl -X POST $TUTUM_WEBHOOK_STAGING
-
       # - install the rancher-upgrade-prep tool
       - git clone https://github.com/ezephoenix/rancher-upgrade prep
       - cd prep && npm install

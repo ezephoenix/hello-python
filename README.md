@@ -1,8 +1,8 @@
 # hello-python
-Python hello world web server
+Python hello world web service
 
-# Running the web server
+# Running the web service
 python hello.py
 
-# Using the web server
+# Using the web service
 curl http://localhost:80
