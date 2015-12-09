@@ -16,8 +16,11 @@ test:
     - docker run -d -p 80:80 $IMAGE_NAME; sleep 10
     - curl --retry 10 --retry-delay 5 -v http://localhost
     - git clone https://github.com/ezephoenix/risk-config.git
+    - cp docker-compose.yml risk-config/rancher/risk/
     - cd risk-config && git status
     - cd risk-config && git add -A
+    - cd risk-config && git commit -m "Updated config"
+    - cd risk-config && git push
 
 deployment:
   hub:
