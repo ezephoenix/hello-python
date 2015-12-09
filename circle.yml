@@ -15,8 +15,9 @@ test:
   override:
     - docker run -d -p 80:80 $IMAGE_NAME; sleep 10
     - curl --retry 10 --retry-delay 5 -v http://localhost
-    - git clone https://github.com/ezephoenix/hello-python.git
-    - cd hello-python && ls
+    - git clone https://github.com/ezephoenix/risk-config.git
+    - cd risk-config && git status
+    - cd risk-config && git add -A
 
 deployment:
   hub:
